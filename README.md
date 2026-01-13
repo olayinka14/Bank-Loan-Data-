@@ -309,7 +309,7 @@ iv. Bad Loan Total Received Amount
 			order by extract(month from issue_date), month_name
 	  ```
 
-   11. **Loan Term Analysis**
+11. **Loan Term Analysis**
 	  ```sql
 		select 
 		term,
