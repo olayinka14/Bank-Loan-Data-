@@ -254,3 +254,31 @@ iv. Bad Loan Total Received Amount
 	select sum(total_payment) from bank_loan_data
 	where loan_status = 'Charged Off'
 ```
+
+8. **Loan status grid view**
+	 ```sql
+	with all_stat as (
+	select 
+		loan_status, 
+		count(id) as total_loan_application, 
+		sum(loan_amount) as total_funded_amount,
+		sum(total_payment) as total_amount_received,
+		avg(int_rate * 100) as interest_rate,
+		avg(dti * 100) as dti
+	from bank_loan_data
+	group by loan_status ),
+
+	mdt_stat as(
+		select 
+			loan_status, 
+			sum(total_payment) as mtd_total_amount_received, 
+			sum(loan_amount) as mdt_total_funded_amount
+		from bank_loan_data
+		where extract(month from issue_date) = 12
+		group by loan_status )
+	
+	select a.*, m.mtd_total_amount_received, m.mdt_total_funded_amount 
+	from all_stat a
+	left join mdt_stat m
+	on a.loan_status = m.loan_status
+	```
