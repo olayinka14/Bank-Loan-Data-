@@ -114,3 +114,143 @@ iii. MOM Total Funded Amount
 		and extract(year from issue_date) = 2021) as pmtd
 ```
 
+3. **Amount Received**
+	i. Total Amount Received
+	 ```sql
+		select sum(total_payment) as total_loan_received from bank_loan_data
+	 ```
+ii. MTD Amount Received
+```sql
+	select sum(total_payment) as mtd_total_loan_received from bank_loan_data
+WHERE EXTRACT(month from issue_date) = 12
+and extract(year from issue_date) = 2021
+```
+iii. MOM Total Amount Received
+```sql
+		select 
+case when pmtd.pmtd_total_loan_received > 0 then
+round((mtd.mtd_total_loan_received::numeric - pmtd.pmtd_total_loan_received)
+/ pmtd.pmtd_total_loan_received * 100, 2) 
+else null
+end as mom_percentage_change from
+
+(select sum(total_payment) as mtd_total_loan_received from bank_loan_data
+WHERE EXTRACT(month from issue_date) = 12
+and extract(year from issue_date) = 2021) as mtd,
+
+(select sum(total_payment) as pmtd_total_loan_received from bank_loan_data
+WHERE EXTRACT(month from issue_date) = 11
+and extract(year from issue_date) = 2021) as pmtd
+```
+
+
+4. **Interest Rate**
+	i. Average Interest Rate
+	 ```sql
+		select (avg(int_rate) * 100) as avg_interest_rate from bank_loan_data
+	 ```
+ii. MTD Average Interest Rate
+```sql
+	select (avg(int_rate) * 100) as avg_interest_rate 
+from bank_loan_data where
+extract(month from issue_date) = 12
+and extract (year from issue_date) = 2021
+```
+iii. MOM Average Interest Rate
+```sql
+	select 
+case 
+	when pmtd.pmtd_avg_interest_rate > 0 then
+	round(((mtd.mtd_avg_interest_rate - pmtd.pmtd_avg_interest_rate)
+	/ pmtd.pmtd_avg_interest_rate * 100)::numeric, 2)
+	else null
+	end as mom_percentage_change from
+
+(select (avg(int_rate) * 100) as mtd_avg_interest_rate 
+from bank_loan_data where
+extract(month from issue_date) = 12
+and extract (year from issue_date) = 2021) as mtd,
+
+(select (avg(int_rate) * 100) as pmtd_avg_interest_rate 
+from bank_loan_data where
+extract(month from issue_date) = 11
+and extract (year from issue_date) = 2021) as pmtd
+```
+
+5. **Debt To Income Ratio**
+	i. Average Debt To Income Ratio
+	 ```sql
+		select (avg(dti) * 100) as avg_dti from bank_loan_data
+	 ```
+ii. MTD Average Debt To Income Ratio
+```sql
+	select (avg(dti) * 100) as avg_dti 
+from bank_loan_data
+where extract(month from issue_date) = 12
+and extract(year from issue_date) = 2021
+```
+iii. MOM Average Debt To Income Ratio
+```sql
+	select
+case when pmdt.pmdt_avg_dti > 0 then
+round(((mdt.mdt_avg_dti - pmdt.pmdt_avg_dti) 
+/ pmdt.pmdt_avg_dti * 100)::numeric, 2)
+else null
+end as mom_percentage_change from
+
+(select (avg(dti) * 100) as mdt_avg_dti 
+from bank_loan_data
+where extract(month from issue_date) = 12
+and extract(year from issue_date) = 2021) mdt,
+
+(select (avg(dti) * 100) as pmdt_avg_dti 
+from bank_loan_data
+where extract(month from issue_date) = 11
+and extract(year from issue_date) = 2021) pmdt
+```
+
+6. **Good Loan**
+	i. Good Loan Percentage
+	 ```sql
+		select round((count(case when loan_status = 'Fully Paid' or loan_status = 'Current' 
+		then id end)* 100.0) / count(id), 2) as good_loan_percentage
+		from bank_loan_data
+	 ```
+ii. Good Loan Application
+```sql
+	select count(id) as good_loan_application from bank_loan_data
+	where loan_status = 'Fully Paid' or loan_status = 'Current'
+```
+iii. Good Loan Funded Amount
+```sql
+	select sum(loan_amount) from bank_loan_data
+	where loan_status = 'Fully Paid' or loan_status = 'Current'
+```
+iv. Good Loan Total Received Amount
+```sql
+	select sum(total_payment) from bank_loan_data
+	where loan_status = 'Fully Paid' or loan_status = 'Current'
+```
+
+7. **Bad Loan**
+	i. Bad Loan Percentage
+	 ```sql
+		select round((count(case when loan_status = 'Charged Off'
+		then id end)* 100.0) / count(id), 2) as bad_loan_percentage
+		from bank_loan_data
+	 ```
+ii. Bad Loan Application
+```sql
+	select count(id) as bad_loan_application from bank_loan_data
+	where loan_status = 'Charged Off'
+```
+iii. Bad Loan Funded Amount
+```sql
+	select sum(loan_amount) from bank_loan_data
+	where loan_status = 'Charged Off'
+```
+iv. Bad Loan Total Received Amount
+```sql
+	select sum(total_payment) from bank_loan_data
+	where loan_status = 'Charged Off'
+```
