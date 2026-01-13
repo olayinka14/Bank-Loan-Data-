@@ -320,7 +320,7 @@ iv. Bad Loan Total Received Amount
 		group by term
 		order by total_funded_amount desc
     ```
-13. **Employee Length Analysis**
+12. **Employee Length Analysis**
 	  ```sql
 		select 
 	emp_length,
@@ -332,7 +332,7 @@ iv. Bad Loan Total Received Amount
 	order by total desc
 	  ```
 
-14. **Loan Purpose Breakdown**
+13. **Loan Purpose Breakdown**
 	  ```sql
 		select 
 	purpose,
@@ -344,7 +344,7 @@ iv. Bad Loan Total Received Amount
 	order by total desc
 	  ```
 
-15. **Home Ownership Analysis**
+14. **Home Ownership Analysis**
 	  ```sql
 		select 
 	home_ownership,
