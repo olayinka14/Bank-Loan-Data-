@@ -56,7 +56,7 @@ SELECT *
 FROM retail_sales
 WHERE sale_date = '2022-11-05';
 ```
-i. **MTD Total funded amount
+i. ***MTD Total funded amount
  ```sql
 select count(id) as mtd_total_loan_application from bank_loan_data
 where extract(month from issue_date) = 12 and extract(year from issue_date) = 2021
