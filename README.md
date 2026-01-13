@@ -282,3 +282,78 @@ iv. Bad Loan Total Received Amount
 	left join mdt_stat m
 	on a.loan_status = m.loan_status
 	```
+
+  9. **Monthly trends by issue date**
+	 ```sql
+		select 
+		extract(month from issue_date) as months_number,
+		TO_CHAR(issue_date, 'Month') AS month_name, 
+		count(id) as total, 
+		sum(loan_amount) as total_funded_amount, 
+		sum(total_payment) as total_received_amount
+		from bank_loan_data
+		group by months_number, month_name
+		order by extract(month from issue_date), month_name
+  		```
+
+  10. **Regional Analysis by state**
+	  ```sql
+			select 
+			extract(month from issue_date) as months_number,
+			TO_CHAR(issue_date, 'Month') AS month_name, 
+			count(id) as total, 
+			sum(loan_amount) as total_funded_amount, 
+			sum(total_payment) as total_received_amount
+			from bank_loan_data
+			group by months_number, month_name
+			order by extract(month from issue_date), month_name
+	  ```
+
+   11. **Loan Term Analysis**
+	  ```sql
+		select 
+		term,
+		count(id) as total, 
+		sum(loan_amount) as total_funded_amount, 
+		sum(total_payment) as total_received_amount
+		from bank_loan_data
+		group by term
+		order by total_funded_amount desc
+
+	  ```
+12. **Employee Length Analysis**
+	  ```sql
+		select 
+	emp_length,
+	count(id) as total,
+	sum(loan_amount) as total_funded_amount, 
+	sum(total_payment) as total_received_amount
+	from bank_loan_data
+	group by emp_length
+	order by total desc
+	  ```
+
+13. **Loan Purpose Breakdown**
+	  ```sql
+		select 
+	purpose,
+	count(id) as total,
+	sum(loan_amount) as total_funded_amount, 
+	sum(total_payment) as total_received_amount
+	from bank_loan_data
+	group by purpose
+	order by total desc
+	  ```
+
+14. **Home Ownership Analysis**
+	  ```sql
+		select 
+	home_ownership,
+	count(id) as total,
+	sum(loan_amount) as total_funded_amount, 
+	sum(total_payment) as total_received_amount
+	from bank_loan_data
+	where grade = 'A' and address_state = 'CA'
+	group by home_ownership
+	order by total desc
+	  ```
