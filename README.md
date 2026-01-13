@@ -88,29 +88,29 @@ ALTER COLUMN next_payment_date TYPE DATE USING next_payment_date::DATE;
 		from bank_loan_data
 	 ```
 ii. MTD Total Funded Amount
-	 ```sql
+```sql
 	select sum(loan_amount) as mtd_total_funded_amount 
 	from bank_loan_data
 	where extract(month from issue_date) = 12
 	and extract(year from issue_date) = 2021
-	```
-     iii. MOM Total Funded Amount
-	 ```sql
-	select
-	case when pmtd.pmtd_total_funded_amount > 0 then
-	round((mtd.mtd_total_funded_amount :: numeric - pmtd.pmtd_total_funded_amount) 
-	/ pmtd.pmtd_total_funded_amount * 100, 2)
-	else null
-end as mom_percentage_change from
-
-(select sum(loan_amount) as mtd_total_funded_amount 
-from bank_loan_data
-where extract(month from issue_date) = 12
-and extract(year from issue_date) = 2021) as mtd,
-
-(select sum(loan_amount) as pmtd_total_funded_amount 
-from bank_loan_data
-where extract(month from issue_date) = 11
-and extract(year from issue_date) = 2021) as pmtd
-	```
+```
+iii. MOM Total Funded Amount
+```sql
+		select
+		case when pmtd.pmtd_total_funded_amount > 0 then
+		round((mtd.mtd_total_funded_amount :: numeric - pmtd.pmtd_total_funded_amount) 
+		/ pmtd.pmtd_total_funded_amount * 100, 2)
+		else null
+		end as mom_percentage_change from
+		
+		(select sum(loan_amount) as mtd_total_funded_amount 
+		from bank_loan_data
+		where extract(month from issue_date) = 12
+		and extract(year from issue_date) = 2021) as mtd,
+		
+		(select sum(loan_amount) as pmtd_total_funded_amount 
+		from bank_loan_data
+		where extract(month from issue_date) = 11
+		and extract(year from issue_date) = 2021) as pmtd
+```
 
