@@ -50,14 +50,14 @@ ALTER COLUMN next_payment_date TYPE DATE USING next_payment_date::DATE;
 ### 3. Data Analysis & Findings
 
 
-1. **Total funded amount
+1. **Total funded amount**
 ```sql
 SELECT *
 FROM retail_sales
 WHERE sale_date = '2022-11-05';
 ```
-i. ***MTD Total funded amount
- ```sql
-select count(id) as mtd_total_loan_application from bank_loan_data
-where extract(month from issue_date) = 12 and extract(year from issue_date) = 2021
-```
+	i. MTD Total funded amount
+	 ```sql
+	select count(id) as mtd_total_loan_application from bank_loan_data
+	where extract(month from issue_date) = 12 and extract(year from issue_date) = 2021
+	```
